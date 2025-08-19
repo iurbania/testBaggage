@@ -1,1 +1,50 @@
-<h2>TEST PARA PRUEBA</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulación API</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    pre { background: #f4f4f4; padding: 15px; border-radius: 5px; }
+    button { padding: 10px 15px; }
+  </style>
+</head>
+<body>
+  <h1>Simulación de API Aeroméxico</h1>
+  <button onclick="llamarAPI()">Ejecutar request</button>
+  <h2>Response:</h2>
+  <pre id="output">Esperando respuesta...</pre>
+
+  <script>
+    async function llamarAPI() {
+      const output = document.getElementById("output");
+      output.textContent = "Cargando...";
+
+      try {
+        const response = await fetch("https://amx-c-slfcmbk-pd.aeromexico.com/sc/paxlist/security", {
+          method: "POST",
+          headers: {
+            "channel": "web",
+            "x-transactionId": "25ac73a1-2040-4b5b-8ee1-808d8fcb4b9d",
+            "Authorization": "Bearer TU_TOKEN_AQUI",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "pnr": "HBCNZAl",
+            "airline": "AM",
+            "departureAirport": "MTY",
+            "arrivalAirport": "MEX",
+            "departureDate": "2025-08-19",
+            "flightNumber": "965"
+          })
+        });
+
+        const data = await response.json();
+        output.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        output.textContent = "Error: " + error;
+      }
+    }
+  </script>
+</body>
+</html>
